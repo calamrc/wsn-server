@@ -3,16 +3,14 @@ from django.http import HttpResponse
 
 from .models import Greeting
 
+
 # Create your views here.
 def index(request):
-    # return HttpResponse('Hello from Python!')
+    if request.method == "POST":
+        return HttpResponse('Hello {}'.format(request.body))
 
-    print(request)
+    return render(request, "index.html")
 
-    if request.method == "GET":
-        return render(request, "test-get.html")
-    elif request.method == "POST":
-        return render(request, "test-post.html")
 
 
 def db(request):
