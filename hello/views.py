@@ -7,6 +7,8 @@ from .models import Greeting
 def index(request):
     # return HttpResponse('Hello from Python!')
 
+    print(request)
+
     if request.method == "GET":
         return render(request, "test-get.html")
     elif request.method == "POST":
