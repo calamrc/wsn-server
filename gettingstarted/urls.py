@@ -1,4 +1,6 @@
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 from django.contrib import admin
 
@@ -17,5 +19,9 @@ import hello.views
 urlpatterns = [
     path("", hello.views.index, name="index"),
     path("<str:wsn_id>/", hello.views.fetch),
+    path("captcha/", hello.views.captcha),
     path("admin/", admin.site.urls),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

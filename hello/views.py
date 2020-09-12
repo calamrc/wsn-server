@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from .models import WSNDetails, WSN, Sensor
+from .models import WSNDetails, WSN, Sensor, Captcha
 
 import time
 import json
@@ -62,4 +62,23 @@ def fetch(request, wsn_id):
             return HttpResponse("Error: {}".format(e))
     else:
         return HttpResponse("Not Supported!")
+
+
+def captcha(request):
+    if request.method == "POST":
+        try:
+            image = Captcha(isNew=True, image=request.FILES)
+            image.save()
+
+            return HttpResponse("Added")
+        except Exception as e:
+            return HttpResponse("Error: {}".format(e))
+    elif request.method == "GET":
+        try:
+            catcha = Captcha.objects.get(pk=0)
+            catcha.isNew = False
+            catcha.save()
+            return HttpResponse("Not Supported!")
+        except Exception as e:
+            return HttpResponse("Error: {}".format(e))
 
