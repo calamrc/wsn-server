@@ -82,7 +82,7 @@ def captcha_text(request):
                 captcha.save()
                 return HttpResponse(captcha.text)
             else:
-                return HttpResponse(captcha.state)
+                return HttpResponse("wait")
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
     else:
@@ -106,7 +106,7 @@ def captcha(request):
                 captcha.save()
                 return HttpResponse(captcha.image, content_type="image/png")
             else:
-                return HttpResponse(captcha.state)
+                return HttpResponse("wait")
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
     else:
