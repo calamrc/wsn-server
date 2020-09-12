@@ -67,7 +67,7 @@ def fetch(request, wsn_id):
 def captcha_text(request):
     if request.method == "POST":
         try:
-            captcha = Captcha.objects.all()[0]
+            captcha = Captcha.objects.all()[-1]
             captcha.text = request.body
             captcha.state = "new_text"
             captcha.save()
