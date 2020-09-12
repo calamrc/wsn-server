@@ -64,21 +64,49 @@ def fetch(request, wsn_id):
         return HttpResponse("fetch {}".format(request.method))
 
 
-def captcha(request):
+def captcha_text(request):
     if request.method == "POST":
         try:
-            image = Captcha(isNew=True, image=request.FILES["media"])
-            image.save()
-
-            return HttpResponse(image.isNew)
+            captcha = Captcha.objects.all()[0]
+            captcha.text = request.body
+            captcha.state = "new_text"
+            captcha.save()
+            return HttpResponse(captcha.text)
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
     elif request.method == "GET":
         try:
             captcha = Captcha.objects.all()[0]
-            captcha.isNew = False
-            captcha.save()
-            return HttpResponse(captcha.image, content_type="image/png")
+            if captcha.state == "new_text":
+                captcha.state = "old_text"
+                captcha.save()
+                return HttpResponse(captcha.text)
+            else:
+                return HttpResponse(captcha.state)
+        except Exception as e:
+            return HttpResponse("Error: {}".format(e))
+    else:
+        return HttpResponse("captcha {}".format(request.method))
+
+
+def captcha(request):
+    if request.method == "POST":
+        try:
+            image = Captcha(state="new_image", image=request.FILES["media"])
+            image.save()
+
+            return HttpResponse(image.state)
+        except Exception as e:
+            return HttpResponse("Error: {}".format(e))
+    elif request.method == "GET":
+        try:
+            captcha = Captcha.objects.all()[0]
+            if captcha.state == "new_image":
+                captcha.state = "old_image"
+                captcha.save()
+                return HttpResponse(captcha.image, content_type="image/png")
+            else:
+                return HttpResponse(captcha.state)
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
     else:

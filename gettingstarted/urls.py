@@ -20,6 +20,7 @@ urlpatterns = [
     path("", hello.views.index, name="index"),
     path("<str:wsn_id>/", hello.views.fetch),
     path("captcha", hello.views.captcha),
+    path("captcha_text", hello.views.captcha_text),
     path("admin/", admin.site.urls),
 ]
 

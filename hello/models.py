@@ -25,5 +25,6 @@ class WSNDetails(models.Model):
         # ordering = ("when",)
 
 class Captcha(models.Model):
-    isNew = models.BooleanField()
+    state = models.CharField(max_length=20)
+    text = models.CharField(max_length=20)
     image = models.ImageField(upload_to="captcha/")
