@@ -19,4 +19,8 @@ class WSN(models.Model):
 class WSNDetails(models.Model):
     sensor = models.ForeignKey(Sensor, on_delete=models.CASCADE)
     wsn = models.ForeignKey(WSN, on_delete=models.CASCADE)
+    when = models.DateTimeField(auto_now=True)
+
+    # class Meta:
+        # ordering = ("when",)
 
