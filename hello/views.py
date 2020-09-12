@@ -76,7 +76,7 @@ def captcha_text(request):
             return HttpResponse("Error: {}".format(e))
     elif request.method == "GET":
         try:
-            captcha = Captcha.objects.all()[0]
+            captcha = Captcha.objects.all().order_by("-id")[0]
             if captcha.state == "new_text":
                 captcha.state = "old_text"
                 captcha.save()
@@ -100,7 +100,7 @@ def captcha(request):
             return HttpResponse("Error: {}".format(e))
     elif request.method == "GET":
         try:
-            captcha = Captcha.objects.all()[0]
+            captcha = Captcha.objects.all().order_by("-id")[0]
             if captcha.state == "new_image":
                 captcha.state = "old_image"
                 captcha.save()
