@@ -80,7 +80,7 @@ def captcha_text(request):
             if captcha.state == "new_text":
                 captcha.state = "old_text"
                 captcha.save()
-                return HttpResponse(captcha.text)
+                return HttpResponse("captcha_text: {}".format(captcha.text))
             else:
                 return HttpResponse(captcha.state)
         except Exception as e:
@@ -97,16 +97,16 @@ def captcha(request):
 
             return HttpResponse(image.state)
         except Exception as e:
-            return HttpResponse("Error: {}".format(e))
+            return HttpResponse("Error: {}".format(e), status=204)
     elif request.method == "GET":
         try:
             captcha = Captcha.objects.all().order_by("-id")[0]
             if captcha.state == "new_image":
                 captcha.state = "old_image"
                 captcha.save()
-                return HttpResponse(captcha.image, content_type="image/png")
+                return HttpResponse(captcha.image, status=200, content_type="image/png")
             else:
-                return HttpResponse(captcha.state)
+                return HttpResponse(status=204)
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
     else:
