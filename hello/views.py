@@ -37,7 +37,7 @@ def index(request):
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
     else:
-        return HttpResponse("Not Supported!")
+        return HttpResponse("index {}".format(request.method))
 
 def fetch(request, wsn_id):
     if request.method == "GET":
@@ -61,24 +61,26 @@ def fetch(request, wsn_id):
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
     else:
-        return HttpResponse("Not Supported!")
+        return HttpResponse("fetch {}".format(request.method))
 
 
 def captcha(request):
     if request.method == "POST":
         try:
-            image = Captcha(isNew=True, image=request.FILES)
+            image = Captcha(isNew=True, image=request.FILES["media"])
             image.save()
 
-            return HttpResponse("Added")
+            return HttpResponse(image.isNew)
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
     elif request.method == "GET":
         try:
-            catcha = Captcha.objects.get(pk=0)
-            catcha.isNew = False
-            catcha.save()
-            return HttpResponse("Not Supported!")
+            captcha = Captcha.objects.all()[0]
+            captcha.isNew = False
+            captcha.save()
+            return HttpResponse(captcha.image, content_type="image/png")
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
+    else:
+        return HttpResponse("captcha {}".format(request.method))
 
