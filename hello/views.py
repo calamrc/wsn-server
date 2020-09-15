@@ -36,6 +36,20 @@ def index(request):
             return HttpResponse("Added")
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
+    elif request.method  == "GET":
+        try:
+            wsnDetails = WSNDetails.objects.all()
+            nodes = {
+                "nodes": [],
+            }
+            for wsn in wsnDetails.wsn.all():
+                wsn_id = wsn.wsn_id
+                if not(wsn_id in nodes["nodes"]):
+                    nodes["nodes"].append(wsn_id)
+
+            return HttpResponse(json.dumps(nodes))
+        except Exception as e:
+            return HttpResponse("Error: {}".format(e))
     else:
         return HttpResponse("index {}".format(request.method))
 
