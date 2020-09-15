@@ -38,17 +38,17 @@ def index(request):
             return HttpResponse("Error: {}".format(e))
     elif request.method  == "GET":
         try:
-            wsnDetails = WSNDetails.objects.values()
+            wsnDetails = WSNDetails.objects.all()
             nodes = {
                 "nodes": [],
             }
-            # for wsn in wsnDetails:
-                # wsn_id = wsn.wsn_id
-                # if not(wsn_id in nodes["nodes"]):
-                    # nodes["nodes"].append(wsn_id)
+            for wd in wsnDetails:
+                wsn_id = wd.wsn.wsn_id
+                if not(wsn_id in nodes["nodes"]):
+                    nodes["nodes"].append(wsn_id)
 
-            # return HttpResponse(json.dumps(nodes))
-            return HttpResponse(wsnDetails)
+            return HttpResponse(json.dumps(nodes))
+            # return HttpResponse(wsnDetails)
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
     else:
