@@ -38,7 +38,7 @@ def index(request):
             return HttpResponse("Error: {}".format(e))
     elif request.method  == "GET":
         try:
-            wsnDetails = WSNDetails.objects.order_by("-when")
+            wsnDetails = WSNDetails.objects
             # nodes = {
                 # "nodes": [],
             # }
@@ -48,7 +48,7 @@ def index(request):
                     # nodes["nodes"].append(wsn_id)
 
             # return HttpResponse(json.dumps(nodes))
-            return HttpResponse(wsnDetails.wsn.sensors.all())
+            return HttpResponse(wsnDetails.wsn)
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
     else:
