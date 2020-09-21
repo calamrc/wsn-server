@@ -55,6 +55,7 @@ def index(request):
         return HttpResponse("index {}".format(request.method))
 
 def fetch(request, wsn_id):
+    print("fetch")
     if request.method == "GET":
         try:
             wsnDetails = WSNDetails.objects.order_by("-when").filter(wsn__wsn_id=wsn_id)[0]
