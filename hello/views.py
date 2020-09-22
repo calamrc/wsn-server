@@ -39,9 +39,12 @@ def index(request):
 
             wsnList = WSNDetails.objects.order_by("when").filter(wsn__wsn_id=dataDict.get("id"))
 
-            if len(wsnList) >= 10:
+            size = len(wsnList)
+
+            if len(wsnList) >= 50:
                 wsnList[0].delete()
-                return HttpResponse("Trimmed: {}".format(len(wsnList)))
+                wsnList = WSNDetails.objects.order_by("when").filter(wsn__wsn_id=dataDict.get("id"))
+                return HttpResponse("Trimmed from {} to {}".format(size, len(wsnList)))
             else:
                 return HttpResponse("Added: {}".format(len(wsnList)))
         except Exception as e:
