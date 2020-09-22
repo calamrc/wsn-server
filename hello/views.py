@@ -16,7 +16,8 @@ def index(request):
             wsnDetails = {
                 "wsn_id": dataDict.get("id"),
                 "name": dataDict.get("name"),
-                "location": dataDict.get("location")
+                "location": dataDict.get("location"),
+                "battery": dataDict.get("battery"),
             }
 
             newWSN = WSN.objects.create(**wsnDetails)
