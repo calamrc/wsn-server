@@ -14,9 +14,6 @@ def index(request):
             dataJSON = request.body
             dataDict = json.loads(dataJSON)
 
-            wsnList = WSNDetails.objects.order_by("when").filter(wsn__wsn_id=dataDict.get("id"))
-            if len(wsnList) >= 10:
-                wsnList[0].delete()
 
             wsnDetails = {
                 "wsn_id": dataDict.get("id"),
@@ -42,7 +39,11 @@ def index(request):
 
             wsnList = WSNDetails.objects.order_by("when").filter(wsn__wsn_id=dataDict.get("id"))
 
-            return HttpResponse(len(wsnList))
+            if len(wsnList) >= 10:
+                wsnList[0].delete()
+                return HttpResponse("Trimmed: {}".format(len(wsnList)))
+            else:
+                return HttpResponse("Added: {}".format(len(wsnList)))
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
     elif request.method  == "GET":
