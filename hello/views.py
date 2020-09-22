@@ -10,14 +10,20 @@ import json
 def index(request):
     if request.method == "POST":
         try:
+
             dataJSON = request.body
             dataDict = json.loads(dataJSON)
+
+            wsnList = WSNDetails.objects.order_by("when").filter(wsn__wsn_id=dataDict.get("id"))
+            if len(wsnList) >= 10:
+                wsnList[0].delete()
 
             wsnDetails = {
                 "wsn_id": dataDict.get("id"),
                 "name": dataDict.get("name"),
                 "location": dataDict.get("location"),
                 "battery": dataDict.get("battery"),
+                "active": dataDict.get("active"),
             }
 
             newWSN = WSN.objects.create(**wsnDetails)
@@ -34,7 +40,9 @@ def index(request):
                 w = WSNDetails(sensor=newSensor, wsn=newWSN)
                 w.save()
 
-            return HttpResponse("Added")
+            wsnList = WSNDetails.objects.order_by("when").filter(wsn__wsn_id=dataDict.get("id"))
+
+            return HttpResponse(len(wsnList))
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
     elif request.method  == "GET":
@@ -73,6 +81,7 @@ def fetch(request, wsn_id):
                 "name": wsnDetails.wsn.name,
                 "location": wsnDetails.wsn.location,
                 "battery": wsnDetails.wsn.battery,
+                "active": wsnDetails.wsn.active,
                 "sensors": sensors
             }
             return HttpResponse(json.dumps(dataDict))
