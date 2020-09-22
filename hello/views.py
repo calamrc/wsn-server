@@ -72,6 +72,7 @@ def fetch(request, wsn_id):
                 "id": wsnDetails.wsn.wsn_id,
                 "name": wsnDetails.wsn.name,
                 "location": wsnDetails.wsn.location,
+                "battery": wsnDetails.wsn.battery,
                 "sensors": sensors
             }
             return HttpResponse(json.dumps(dataDict))
