@@ -41,8 +41,8 @@ def index(request):
 
             size = len(wsnList)
 
-            if len(wsnList) >= 50:
-                wsnList[0].delete()
+            if len(wsnList) >= 20:
+                wsnList[0].wsn.sensors.all().delete()
                 wsnList = WSNDetails.objects.order_by("when").filter(wsn__wsn_id=dataDict.get("id"))
                 return HttpResponse("Trimmed from {} to {}".format(size, len(wsnList)))
             else:
