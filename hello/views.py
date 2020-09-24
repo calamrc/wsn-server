@@ -20,6 +20,7 @@ def index(request):
                 "name": dataDict.get("name"),
                 "location": dataDict.get("location"),
                 "battery": dataDict.get("battery"),
+                "timestamp": dataDict.get("timestamp"),
                 "active": dataDict.get("active"),
             }
 
@@ -41,7 +42,7 @@ def index(request):
 
             size = len(wsnList)
 
-            if len(wsnList) >= 20:
+            if len(wsnList) > 20:
                 wsnList[0].wsn.sensors.all().delete()
                 wsnList = WSNDetails.objects.order_by("when").filter(wsn__wsn_id=dataDict.get("id"))
                 return HttpResponse("Trimmed from {} to {}".format(size, len(wsnList)))
@@ -86,6 +87,7 @@ def fetch(request, wsn_id):
                 "location": wsnDetails.wsn.location,
                 "battery": wsnDetails.wsn.battery,
                 "active": wsnDetails.wsn.active,
+                "timestamp": wsnDetails.wsn.timestamp,
                 "sensors": sensors
             }
             return HttpResponse(json.dumps(dataDict))
