@@ -14,6 +14,7 @@ class WSN(models.Model):
     battery = models.CharField(max_length=2)
     timestamp = models.CharField(max_length=30)
     active = models.CharField(max_length=10)
+    rssi = models.CharField(max_length=10)
     sensors = models.ManyToManyField(Sensor, through="WSNDetails")
 
     def __str__(self):

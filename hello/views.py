@@ -22,6 +22,7 @@ def index(request):
                 "battery": dataDict.get("battery"),
                 "timestamp": dataDict.get("timestamp"),
                 "active": dataDict.get("active"),
+                "rssi": dataDict.get("rssi"),
             }
 
             newWSN = WSN.objects.create(**wsnDetails)
@@ -88,6 +89,7 @@ def fetch(request, wsn_id):
                 "battery": wsnDetails.wsn.battery,
                 "active": wsnDetails.wsn.active,
                 "timestamp": wsnDetails.wsn.timestamp,
+                "rssi": wsnDetails.wsn.rssi,
                 "sensors": sensors
             }
             return HttpResponse(json.dumps(dataDict))
