@@ -160,3 +160,19 @@ def captcha(request):
             return HttpResponse("Error: {}".format(e))
     else:
         return HttpResponse("captcha {}".format(request.method))
+
+
+def clear(request):
+    if request.method == "GET":
+        try:
+            wsnDetails = WSNDetails.objects.all()
+
+            for wd in wsnDetails:
+                wd.delete()
+
+            return HttpResponse("database cleared")
+            # return HttpResponse(wsnDetails)
+        except Exception as e:
+            return HttpResponse("Error: {}".format(e))
+    else:
+        return HttpResponse("index {}".format(request.method))

@@ -21,6 +21,7 @@ urlpatterns = [
     path("<str:wsn_id>/", hello.views.fetch),
     path("captcha", hello.views.captcha),
     path("captcha_text", hello.views.captcha_text),
+    path("clear", hello.views.clear),
     path("admin/", admin.site.urls),
 ]
 
