@@ -6,6 +6,7 @@ from .models import WSNDetails, WSN, Sensor, Captcha
 import time
 import json
 
+
 # Create your views here.
 def index(request):
     if request.method == "POST":
@@ -13,7 +14,6 @@ def index(request):
 
             dataJSON = request.body
             dataDict = json.loads(dataJSON)
-
 
             wsnDetails = {
                 "wsn_id": dataDict.get("id"),
@@ -39,19 +39,27 @@ def index(request):
                 w = WSNDetails(sensor=newSensor, wsn=newWSN)
                 w.save()
 
-            wsnList = WSNDetails.objects.order_by("when").filter(wsn__wsn_id=dataDict.get("id"))
+            wsnList = WSNDetails.objects \
+                .order_by("when") \
+                .filter(wsn__wsn_id=dataDict.get("id"))
 
             size = len(wsnList)
 
             if len(wsnList) > 20:
                 wsnList[0].wsn.sensors.all().delete()
-                wsnList = WSNDetails.objects.order_by("when").filter(wsn__wsn_id=dataDict.get("id"))
-                return HttpResponse("Trimmed from {} to {}".format(size, len(wsnList)))
+                wsnList = WSNDetails.objects \
+                    .order_by("when") \
+                    .filter(wsn__wsn_id=dataDict.get("id"))
+
+                return HttpResponse(
+                        "Trimmed from {} to {}".format(
+                            size,
+                            len(wsnList)))
             else:
                 return HttpResponse("Added: {}".format(len(wsnList)))
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
-    elif request.method  == "GET":
+    elif request.method == "GET":
         try:
             wsnDetails = WSNDetails.objects.all()
             nodes = {
@@ -69,11 +77,14 @@ def index(request):
     else:
         return HttpResponse("index {}".format(request.method))
 
+
 def fetch(request, wsn_id):
     print("fetch")
     if request.method == "GET":
         try:
-            wsnDetails = WSNDetails.objects.order_by("-when").filter(wsn__wsn_id=wsn_id)[0]
+            wsnDetails = WSNDetails.objects \
+                .order_by("-when") \
+                .filter(wsn__wsn_id=wsn_id)[0]
             sensors = []
             for sensor in wsnDetails.wsn.sensors.all():
                 sensors.append({
@@ -139,11 +150,13 @@ def captcha(request):
             if captcha.state == "new_image":
                 captcha.state = "old_image"
                 captcha.save()
-                return HttpResponse(captcha.image, status=200, content_type="image/png")
+                return HttpResponse(
+                        captcha.image,
+                        status=200,
+                        content_type="image/png")
             else:
                 return HttpResponse(status=204)
         except Exception as e:
             return HttpResponse("Error: {}".format(e))
     else:
         return HttpResponse("captcha {}".format(request.method))
-
